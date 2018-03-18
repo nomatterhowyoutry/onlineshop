@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.signals import post_save
 from product.models import Product
 
 class Status(models.Model):
@@ -33,6 +34,9 @@ class Order(models.Model):
         verbose_name = 'Order'
         verbose_name_plural = 'Orders'
 
+    def save(self, *args, **kwargs):
+        super(Order, self).save(*args, **kwargs)
+
 
 class Product_in_order(models.Model):
     order = models.ForeignKey(Order, blank=True, null=True, default=None, on_delete=models.CASCADE)
@@ -50,4 +54,25 @@ class Product_in_order(models.Model):
     class Meta:
         verbose_name = 'Product in order'
         verbose_name_plural = 'Products in order'
+
+    def save(self, *args, **kwargs):
+        price_per_item = self.product.price
+        self.price_per_item = price_per_item
+        self.total_price = self.quantity * price_per_item
+
+        super(Product_in_order, self).save(*args, **kwargs)
+
+
+def Product_in_order_post_save(sender, instance, created, **kwargs):
+    order = instance.order
+    all_products_in_order = Product_in_order.objects.filter(order=order, is_active=True)
+
+    order_total_price = 0
+    for item in all_products_in_order:
+        order_total_price += item.total_price
+
+    instance.order.total_price = order_total_price
+    instance.order.save(force_update=True)
+
+post_save.connect(Product_in_order_post_save, sender=Product_in_order)
 
