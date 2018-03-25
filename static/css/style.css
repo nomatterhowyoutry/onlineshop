@@ -5,8 +5,37 @@ html, body, .wrapper{
 	background-color: #edeef0;
 }
 
+.wrapper{
+	position: relative;
+	min-height: 100%
+}
+
+.wrapper-content{
+	overflow: auto;
+	margin-bottom: 90px;
+	padding: 15px;
+}
+
+.footer{
+	position: absolute;
+	margin-top: -90px;
+	height: 90px;
+	clear: both;
+	background-color: white;
+	bottom: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    overflow:hidden;
+}
+
+
+.navbar{
+	margin-bottom: 0px;
+}
+
 .section-top{
-	margin: 20px;
+	margin: 0px;
 }
 
 .product-item{
@@ -15,7 +44,7 @@ html, body, .wrapper{
 	border: solid 1px white-grey;
 	position: relative;
 	margin-bottom: 25px;
-	padding: 5px;
+	padding: 10px 0 10px 0;
 	text-align: center;
 }
 
@@ -31,4 +60,23 @@ html, body, .wrapper{
 	bottom: 60px;
 	left: 50%;
 	margin-left: -50px; 
+}
+.arr-title{
+	text-align: center;
+}
+.discount-container{
+	position: absolute;
+	text-align: center;
+	top: 30%;
+	background-color: #55e073;
+	width: 30%;
+	color: white;
+	font-weight: 700;
+	padding: 4px;
+	margin-left:3px;
+}
+.section-delivery{
+	height: 300px;
+	text-align: center;
+	background-color: white;
 }

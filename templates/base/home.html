@@ -2,34 +2,35 @@
 {% load static %}
 
 	{% block content %}
-<!-- 		<div class="section-top">
-			<img src="{% static 'images/index.jpeg' %}" class="img-responsive">
-		</div> -->
-		<div class="section">
+		<div class="section-top">
+			<img src="{% static 'images/index.jpg' %}" class="img-responsive">
+		</div>
+		<div class="section section1">
+			<h2 class="arr-title">New Arrivals</h2>
 			<div class="row">
-				{% for product_image in products_images %}
-					<div class="col-lg-3">
-
-						<div class="product-item">
-							<div>
-								<img src="{{ product_image.image.url }}" class="img-responsive">
-							</div>
-							<h4>{{ product_image.product.name }}</h4>
-							<p>
-								{{ product_image.product.description|truncatechars_html:70 }}
-							</p>
-							<div class="item-price">
-								<p>
-									{{ product_image.product.price }} UAH
-								</p>
-							</div>
-							<div class="add-to-cart-btn">
-								<button class="btn btn-success">
-									Add to cart
-								</button>
-							</div>
-						</div>
-					</div>
+				{% for product_item in products_items %}
+					{% include "base/product_item.html" %}
+				{% endfor %}
+			</div>
+		</div>
+		<div class="section section-delivery">
+			<div>
+				<p>Free Shipping</p>
+			</div>
+		</div>
+		<div class="section section2">
+			<h2 class="arr-title">Phones</h2>
+			<div class="row">
+				{% for product_item in products_items_phones %}
+					{% include "base/product_item.html" %}
+				{% endfor %}
+			</div>
+		</div>
+		<div class="section section3">
+			<h2 class="arr-title">Laptops</h2>
+			<div class="row">
+				{% for product_item in products_items_laptops %}
+					{% include "base/product_item.html" %}
 				{% endfor %}
 			</div>
 		</div>

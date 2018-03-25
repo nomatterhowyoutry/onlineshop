@@ -21,3 +21,11 @@ class Product_imageAdmin(admin.ModelAdmin):
         model = Product_image
 
 admin.site.register(Product_image, Product_imageAdmin)
+
+class ProductCategoryAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ProductCategory._meta.fields]
+
+    class Meta:
+        model = ProductCategory
+
+admin.site.register(ProductCategory, ProductCategoryAdmin)
