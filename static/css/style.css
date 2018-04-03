@@ -80,3 +80,22 @@ html, body, .wrapper{
 	text-align: center;
 	background-color: white;
 }
+
+.cart-container{
+	position: relative;
+	padding: 15px;
+	width: 400px;
+}
+
+.cart-items{
+	position: absolute;
+	top: 50px;
+	width: 100%;
+	z-index: 10;
+	padding: 10px;
+	background-color: red;
+}
+
+.cart-text{
+	margin: 0px 0px 0px;
+}

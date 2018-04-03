@@ -76,3 +76,20 @@ def Product_in_order_post_save(sender, instance, created, **kwargs):
 
 post_save.connect(Product_in_order_post_save, sender=Product_in_order)
 
+class Product_in_cart(models.Model):
+    order = models.ForeignKey(Order, blank=True, null=True, default=None, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, blank=True, null=True, default=None, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+    price_per_item = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0) #price * quantity
+    is_active = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True, auto_now=False)
+    updated = models.DateTimeField(auto_now_add=False, auto_now=True)
+
+    def __str__(self):
+        return "Product in cart %s" % self.product.name
+
+    class Meta:
+        verbose_name = 'Product in cart'
+        verbose_name_plural = 'Products in cart'
+
