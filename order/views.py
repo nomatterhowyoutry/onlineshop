@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+from .models import Product_in_cart
 
 def cart_adding(request):
     return_dict = dict()
@@ -7,5 +8,37 @@ def cart_adding(request):
     session_key = request.session.session_key
 
     print(request.POST)
+
+    data = request.POST
+    product_id = data.get('product_id')
+    quantity = data.get('quantity')
+    is_delete = data.get('is_delete')
+
+    if is_delete == 'true':
+        Product_in_cart.objects.filter(id=product_id).update(is_active=False)
+    else:
+        new_product, created = Product_in_cart.objects.get_or_create(
+            session_key=session_key, product_id=product_id, is_active=True, defaults={'quantity':quantity})
+        if not created:
+            new_product.quantity += int(quantity)
+            new_product.save(force_update=True)
+
+    products_total_quantity = Product_in_cart.objects.filter(
+        session_key=session_key, is_active=True).count()
+
+    products_in_cart = Product_in_cart.objects.filter(session_key=session_key, is_active=True)
+    products_total_quantity = products_in_cart.count()
+
+    return_dict['products_total_quantity'] = products_total_quantity
+    return_dict['products'] = list()
+
+    for item in products_in_cart:
+        product_dict = dict()
+        product_dict['id'] = item.id
+        product_dict['name'] = item.product.name
+        product_dict['quantity'] = item.quantity
+        product_dict['price_per_item'] = item.product.price
+        product_dict['total_price'] = item.total_price
+        return_dict['products'].append(product_dict)
 
     return JsonResponse(return_dict)

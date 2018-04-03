@@ -10,6 +10,6 @@ def product(request, product_id):
     if not session_key:
         request.session.cycle_key()
 
-    print('session key: ', session_key)
+    print('session key: ', request.session.session_key)
 
     return render(request, 'product/product.html', locals())

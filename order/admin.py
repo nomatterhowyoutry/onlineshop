@@ -29,3 +29,11 @@ class Product_in_orderAdmin(admin.ModelAdmin):
         model = Product_in_order
 
 admin.site.register(Product_in_order, Product_in_orderAdmin)
+
+class Product_in_cartAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Product_in_cart._meta.fields]
+
+    class Meta:
+        model = Product_in_cart
+
+admin.site.register(Product_in_cart, Product_in_cartAdmin)

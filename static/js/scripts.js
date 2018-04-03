@@ -1,21 +1,15 @@
 $(document).ready(function(){
 	var form = $('#form-buying-product');
 	console.log(form);
-	form.on('submit', function(e){
-		e.preventDefault();
-		var nmb = $('#number').val();
-		console.log(nmb);
-		var submit_btn = $('#submit-btn');
-		var product_id = submit_btn.data('product_id');
-		var product_name = submit_btn.data('product_name');
-		var product_price = submit_btn.data('product_price');
-		console.log(product_id);
-		console.log(product_name);
-		console.log(product_price);
 
+	function cart_update(product_id, nmb, is_delete) {
 		var data = {};
 		data.product_id = product_id;
 		data.quantity = nmb;
+
+		if (is_delete) {
+			data['is_delete'] = true
+		}
 
 		var csrf_token = $('#form-buying-product [name="csrfmiddlewaretoken"]').val();
 		data["csrfmiddlewaretoken"] = csrf_token;
@@ -27,14 +21,32 @@ $(document).ready(function(){
 			cache: true,
 			success: function (data) {
 				console.log('OK');
+				if (data.products_total_quantity || data.products_total_quantity == 0){
+					$('#products_total_quantity').text('('+data.products_total_quantity+')');
+					console.log(data.products)
+					$('.cart-items ul').html("");
+					$.each(data.products, function(k, v){
+						$('.cart-items ul').append(
+							'<li>'+v.name +' * '+ v.quantity + ' = '+ v.total_price +' <a href="" class="delete-item" data-product_id="'+v.id+'">x</a></li>');
+					});
+				}
 			},
 			error: function () {
 				console.log('error');
 			}
 		});
+	};
 
-		$('.cart-items ul').append('<li>'+product_name +', '+ nmb + ', '+ product_price*nmb 
-			+' <a class="delete-item" href="">x</a></li>');
+	form.on('submit', function(e){
+		e.preventDefault();
+		var nmb = $('#number').val();
+		var submit_btn = $('#submit-btn');
+		var product_id = submit_btn.data('product_id');
+		var product_name = submit_btn.data('product_name');
+		var product_price = submit_btn.data('product_price');
+
+		cart_update(product_id, nmb, is_delete=false);
+
 	});
 
 	$('.cart-container').on('mouseover', function(e){
@@ -48,6 +60,8 @@ $(document).ready(function(){
 
 	$(document).on('click', '.delete-item', function(e){
 		e.preventDefault();
-		$(this).closest('li').remove();
-	});
+		product_id = $(this).data("product_id");
+		nmb = 0;
+		cart_update(product_id, nmb, is_delete=true);
+	})
 });

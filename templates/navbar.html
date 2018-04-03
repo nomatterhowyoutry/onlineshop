@@ -30,9 +30,19 @@
           <ul class="nav navbar-nav navbar-right">
             <li>
               <div class="cart-container">
-                <a href=""><p align='right' class='cart-text'>Cart</p></a>
+                  <a href=""><p align='right' class='cart-text'>Cart
+                  <span id='products_total_quantity'>
+                    {% if products_total_quantity %}
+                    ({{ products_total_quantity }})
+                    {% else %}
+                    (0)
+                    {% endif %}
+                  </span></p></a>
                 <div class='cart-items hidden'>
                   <ul class="">
+                    {% for product_in_cart in products_in_cart %}
+                      <li>{{ product_in_cart.product.name }} * {{ product_in_cart.quantity }} = {{ product_in_cart.total_price }} <a href="" class="delete-item" data-product_id="{{ product_in_cart.id }}">x</a></li>
+                    {% endfor %}
                   </ul>
                 </div>
               </div>
