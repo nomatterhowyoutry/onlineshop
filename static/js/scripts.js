@@ -64,4 +64,25 @@ $(document).ready(function(){
 		nmb = 0;
 		cart_update(product_id, nmb, is_delete=true);
 	})
+
+	function calculating_cart_price(){
+		var total_order_price = 0;
+		$('.total_product_price').each(function(){
+			total_order_price += parseFloat($(this).text());
+		});
+		console.log(total_order_price);
+		$('#total_order_price').text(total_order_price.toFixed(2));
+	};
+
+	$(document).on('change', '.product_in_cart_quantity', function(){
+		var current_quantity = $(this).val();
+		var current_row = $(this).closest('tr');
+		var current_price = parseFloat(current_row.find('.product_in_cart_price_per_item').text()).toFixed(2);
+		var total_price = parseFloat(current_quantity*current_price).toFixed(2);
+		current_row.find('.total_product_price').text(total_price);
+
+		calculating_cart_price();
+	});
+
+	calculating_cart_price();
 });
