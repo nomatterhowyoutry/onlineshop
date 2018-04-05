@@ -1,6 +1,8 @@
 from django.db import models
 from django.db.models.signals import post_save
 from product.models import Product
+from phonenumber_field.modelfields import PhoneNumberField
+from django.contrib.auth.models import User
 
 class Status(models.Model):
     name = models.CharField(max_length=24, blank=True, null=True, default=None)
@@ -17,10 +19,11 @@ class Status(models.Model):
 
 
 class Order(models.Model):
+    user = models.ForeignKey(User, blank=True, default=None, null=True, on_delete=models.CASCADE)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0) # total price for all items in order
     customer_name = models.CharField(max_length=48, blank=True, null=True, default=None)
     customer_email = models.EmailField()
-    customer_phone = models.CharField(max_length=48, blank=True, null=True, default=None)
+    customer_phone = PhoneNumberField(blank=True, null=True, default=None)
     customer_address = models.CharField(max_length=128, blank=True, null=True, default=None)
     comments = models.TextField(blank=True, null=True, default=None)
     status = models.ForeignKey(Status, on_delete=models.CASCADE)

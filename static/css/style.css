@@ -99,3 +99,7 @@ html, body, .wrapper{
 .cart-text{
 	margin: 0px 0px 0px;
 }
+
+.form-error{
+	color: red;
+}

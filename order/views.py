@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from .models import Product_in_cart
+from .models import *
+from .forms import Checkout_form
+from django.contrib.auth.models import User
 
 def cart_adding(request):
     return_dict = dict()
@@ -49,7 +51,37 @@ def checkout(request):
 
     products_in_cart = Product_in_cart.objects.filter(session_key=session_key, is_active=True)
 
+    form = Checkout_form(request.POST or None)
+
     if request.POST:
         print(request.POST)
+        if form.is_valid():
+            print('form is valid')
+            data = request.POST
+            phone = data['phone']
+            name = data['name']
+            user, created = User.objects.get_or_create(username=phone, defaults={'first_name':name})
+
+            order = Order.objects.create(user=user, customer_name=name, customer_phone=phone, status_id=1)
+
+            for key, value in data.items():
+                if key.startswith('product_in_cart_'):
+                    product_in_cart_id = key.split('product_in_cart_')[1]
+                    product_in_cart = Product_in_cart.objects.get(id=product_in_cart_id)
+                    product_in_cart.quantity = int(value)
+                    product_in_cart.order = order
+                    product_in_cart.save(force_update=True)
+
+                    Product_in_order.objects.create(
+                        order = order,
+                        product=product_in_cart.product, 
+                        quantity=product_in_cart.quantity, 
+                        price_per_item=product_in_cart.price_per_item, 
+                        total_price=product_in_cart.total_price)
+
+                    product_in_cart.is_active = False
+                    product_in_cart.save()
+        else:
+            print('form is not valid')
 
     return render(request, 'order/checkout.html', locals())

@@ -6,9 +6,29 @@
   <div class="container">
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2">
+            {% if products_in_cart %}
             <h3 class="text-center">Products in cart</h3>
             <h5 class="text-center">Total Price: {{ products_in_cart.total_price }}</h5>
-            <form method="post">{% csrf_token %}
+            <form method="post" class="form-horizontal">{% csrf_token %}
+
+                <div class="col-lg-8 col-lg-offset-2">
+
+                    <div class="form-group">
+                        <label>Name:</label>
+                        <span class="form-error">{{ form.name.errors }}</span>
+                        <input type="text" name="{{ form.name.html_name }}" class="form-control" value='{{ request.POST.name }}'>
+                    </div>
+                </div>
+
+                <div class="col-lg-8 col-lg-offset-2">
+
+                    <div class="form-group">
+                        <label>Phone:</label>
+                        <span class="form-error">{{ form.phone.errors }}</span>
+                        <input type="text" name="{{ form.phone.html_name }}" class="form-control" value='{{ request.POST.phone }}'>
+                    </div>
+                </div>
+
                 <table class="table text-center">
                     <thead>
                         <tr>
@@ -54,6 +74,9 @@
                 </div>
 
             </form>
+            {% else %}
+                <h3 class="text-center">There is no products</h3>
+            {% endif %}
         </div>
 
     </div>
