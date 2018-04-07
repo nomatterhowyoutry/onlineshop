@@ -1,5 +1,7 @@
 from django.shortcuts import render
-from product.models import *
+from rest_framework import viewsets, permissions
+from .serializers import Product_Serializer
+from .models import *
 
 
 def product(request, product_id):
@@ -13,3 +15,8 @@ def product(request, product_id):
     print('session key: ', request.session.session_key)
 
     return render(request, 'product/product.html', locals())
+
+
+class Product_View(viewsets.ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = Product_Serializer

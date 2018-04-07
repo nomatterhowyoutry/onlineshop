@@ -8,10 +8,12 @@ $(document).ready(function(){
 		data.quantity = nmb;
 
 		if (is_delete) {
-			data['is_delete'] = true
+			data['is_delete'] = 'true';
 		}
 
-		var csrf_token = $('#form-buying-product [name="csrfmiddlewaretoken"]').val();
+		// var csrf_token = $('#form-buying-product [name="csrfmiddlewaretoken"]').val();
+		var csrf_token = document.querySelector('[name="csrfmiddlewaretoken"]').value;
+		console.log('session key:' + csrf_token);
 		data["csrfmiddlewaretoken"] = csrf_token;
 		var url = form.attr('action');
 		$.ajax({

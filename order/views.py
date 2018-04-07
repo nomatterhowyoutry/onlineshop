@@ -17,6 +17,7 @@ def cart_adding(request):
     is_delete = data.get('is_delete')
 
     if is_delete == 'true':
+        print('Deleting from cart: product_id:{}, quantity:{}'.format(product_id, quantity))
         Product_in_cart.objects.filter(id=product_id).update(is_active=False)
     else:
         new_product, created = Product_in_cart.objects.get_or_create(
@@ -48,6 +49,8 @@ def cart_adding(request):
 def checkout(request):
 
     session_key = request.session.session_key
+
+    print('session key: ', request.session.session_key)
 
     products_in_cart = Product_in_cart.objects.filter(session_key=session_key, is_active=True)
 
@@ -85,3 +88,7 @@ def checkout(request):
             print('form is not valid')
 
     return render(request, 'order/checkout.html', locals())
+
+
+
+
