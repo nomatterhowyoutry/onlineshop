@@ -132,3 +132,11 @@ STATICFILES_DIRS = (BASE_DIR + '/static/',)
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES' : ('rest_framework.permissions.IsAuthenticatedOrReadOnly', 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',)
 }
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'nomatterhowyoutry@gmail.com'
+EMAIL_HOST_PASSWORD = '178390771'
+DEFAULT_FROM_EMAIL = 'online-shop'
+DEFAULT_TO_EMAIL = 'opasnuypocik@gmail.com'

@@ -30,6 +30,15 @@
                     </div>
                 </div>
 
+                <div class="col-lg-8 col-lg-offset-2">
+
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <span class="form-error">{{ form.email.errors }}</span>
+                        <input type="text" name="{{ form.email.html_name }}" class="form-control" value='{{ request.POST.email }}'>
+                    </div>
+                </div>
+
                 <table class="table text-center">
                     <thead>
                         <tr>

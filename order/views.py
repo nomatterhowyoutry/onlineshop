@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from .models import *
 from .forms import Checkout_form
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
 
 def cart_adding(request):
     return_dict = dict()
@@ -63,9 +64,12 @@ def checkout(request):
             data = request.POST
             phone = data['phone']
             name = data['name']
+            email = data['email']
             user, created = User.objects.get_or_create(username=phone, defaults={'first_name':name})
 
             order = Order.objects.create(user=user, customer_name=name, customer_phone=phone, status_id=1)
+
+            product_string = ''''''
 
             for key, value in data.items():
                 if key.startswith('product_in_cart_'):
@@ -84,6 +88,20 @@ def checkout(request):
 
                     product_in_cart.is_active = False
                     product_in_cart.save()
+                    product_string += '-{} x {};\n'.format(product_in_cart.product.name, value)
+
+
+            send_mail(
+                'Order details',
+                '''Hello {}!\n
+                You've just ordered:
+                {}
+                Thank you!
+                '''.format(name, product_string),
+                'online-shop@gmail.com',
+                [str(email)],
+                fail_silently=False)
+
         else:
             print('form is not valid')
 
