@@ -140,3 +140,5 @@ EMAIL_HOST_USER = 'nomatterhowyoutry@gmail.com'
 EMAIL_HOST_PASSWORD = '178390771'
 DEFAULT_FROM_EMAIL = 'online-shop'
 DEFAULT_TO_EMAIL = 'opasnuypocik@gmail.com'
+
+DISPLAY_CURRENCY = 'UAH'

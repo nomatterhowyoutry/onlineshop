@@ -14,6 +14,31 @@ class ProductAdmin(admin.ModelAdmin):
 
 admin.site.register(Product, ProductAdmin)
 
+class CurrencyAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Currency._meta.fields]
+
+    class Meta:
+        model = Currency
+
+admin.site.register(Currency, CurrencyAdmin)
+
+class ExchangeRateAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ExchangeRate._meta.fields]
+
+    class Meta:
+        model = ExchangeRate
+
+admin.site.register(ExchangeRate, ExchangeRateAdmin)
+
+class Product_priceAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Product_price._meta.fields]
+
+    class Meta:
+        model = Product
+
+admin.site.register(Product_price, Product_priceAdmin)
+
+
 class Product_imageAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Product_image._meta.fields]
 
