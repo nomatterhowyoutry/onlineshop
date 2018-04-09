@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework import viewsets, permissions
 from .serializers import Product_Serializer
 from .models import *
+from base.views import change_currency
 
 
 def product(request, product_id):

@@ -60,7 +60,7 @@
                                 </td>
                                 <td>
                                     <span class="product_in_cart_price_per_item">
-                                        {{ product_in_cart.price_per_item}}
+                                        {{ product_in_cart.product.price }}
                                     </span>
                                 </td>
                                 <td>
@@ -74,7 +74,7 @@
                 </table>
 
                 <div class="text-right">
-                    <b>Order price:</b> <span id="total_order_price"></span>
+                    <b>Order price:</b> <span id="total_order_price"></span> {{ DISPLAY_CURRENCY }}
                 </div>
 
                 <hr>

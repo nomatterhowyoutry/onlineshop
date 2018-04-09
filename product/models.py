@@ -6,6 +6,9 @@ from django.db import models
 class Currency(models.Model):
     name = models.CharField(max_length=24, blank=True, null=True, default=None)
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         verbose_name = 'currency'
         verbose_name_plural = 'currencies'

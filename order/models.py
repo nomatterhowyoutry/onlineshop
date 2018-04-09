@@ -3,6 +3,7 @@ from django.db.models.signals import post_save
 from product.models import Product
 from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth.models import User
+from product.models import *
 
 class Status(models.Model):
     name = models.CharField(max_length=24, blank=True, null=True, default=None)
@@ -44,6 +45,7 @@ class Order(models.Model):
 class Product_in_order(models.Model):
     order = models.ForeignKey(Order, blank=True, null=True, default=None, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, blank=True, null=True, default=None, on_delete=models.CASCADE)
+    currency = models.CharField(max_length=3, blank=True, null=True, default=None)
     quantity = models.IntegerField(default=1)
     price_per_item = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0) #price * quantity
@@ -83,6 +85,7 @@ class Product_in_cart(models.Model):
     session_key = models.CharField(max_length=128, blank=True, null=True, default=None)
     order = models.ForeignKey(Order, blank=True, null=True, default=None, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, blank=True, null=True, default=None, on_delete=models.CASCADE)
+    currency = models.CharField(max_length=3, blank=True, null=True, default=None)
     quantity = models.IntegerField(default=1)
     price_per_item = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0) #price * quantity

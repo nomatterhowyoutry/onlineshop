@@ -4,6 +4,7 @@ from .models import *
 from .forms import Checkout_form
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
+from django.conf import settings
 
 def cart_adding(request):
     return_dict = dict()
@@ -21,10 +22,13 @@ def cart_adding(request):
         print('Deleting from cart: product_id:{}, quantity:{}'.format(product_id, quantity))
         Product_in_cart.objects.filter(id=product_id).update(is_active=False)
     else:
+        currency = settings.DISPLAY_CURRENCY
+        print(currency)
         new_product, created = Product_in_cart.objects.get_or_create(
             session_key=session_key, product_id=product_id, is_active=True, defaults={'quantity':quantity})
         if not created:
             new_product.quantity += int(quantity)
+            new_product.currency = currency
             new_product.save(force_update=True)
 
     products_total_quantity = Product_in_cart.objects.filter(
@@ -37,11 +41,14 @@ def cart_adding(request):
     return_dict['products'] = list()
 
     for item in products_in_cart:
+        item.price_per_item = item.product.price
+        item.currency = currency
+        item.save(force_update=True)
         product_dict = dict()
         product_dict['id'] = item.id
         product_dict['name'] = item.product.name
         product_dict['quantity'] = item.quantity
-        product_dict['price_per_item'] = item.product.price
+        product_dict['price_per_item'] = item.price_per_item
         product_dict['total_price'] = item.total_price
         return_dict['products'].append(product_dict)
 
@@ -82,6 +89,7 @@ def checkout(request):
                     Product_in_order.objects.create(
                         order = order,
                         product=product_in_cart.product, 
+                        currency=product_in_cart.currency, 
                         quantity=product_in_cart.quantity, 
                         price_per_item=product_in_cart.price_per_item, 
                         total_price=product_in_cart.total_price)

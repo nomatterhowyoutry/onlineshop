@@ -20,7 +20,7 @@
               <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ DISPLAY_CURRENCY }} <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 {% for currency in currencies %}
-                  <form action="change_currency/" method="post">
+                  <form action="{% url 'change_currency' %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="cur" value="{{ currency.name }}">
                     <input type="submit" class="submit_btn btn-link" value="{{ currency.name }}" />
@@ -43,7 +43,7 @@
                 <div class='cart-items hidden'>
                   <ul class="">
                     {% for product_in_cart in products_in_cart %}
-                      <li>{{ product_in_cart.product.name }} * {{ product_in_cart.quantity }} = {{ product_in_cart.total_price }} <a href="" class="delete-item" data-product_id="{{ product_in_cart.id }}">x</a></li>
+                      <li>{{ product_in_cart.product.name }} * {{ product_in_cart.quantity }} = {{ product_in_cart.total_price }} <a href="" class="delete-item" data-product_id="{{ product_in_cart.id }}">x</a></li>{% csrf_token %}
                     {% endfor %}
                   </ul>
                 </div>
