@@ -18,8 +18,6 @@ def cart_adding(request):
     quantity = data.get('quantity')
     is_delete = data.get('is_delete')
 
-    print("i'm updating cart")
-
     if is_delete == 'true':
         print('Deleting from cart: product_id:{}, quantity:{}'.format(product_id, quantity))
         removed_product = Product_in_cart.objects.get(id=product_id)

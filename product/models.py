@@ -3,6 +3,8 @@ from datetime import date
 from django.conf import settings
 from django.db import models
 
+from django.template.defaultfilters import floatformat
+
 class Currency(models.Model):
     name = models.CharField(max_length=24, blank=True, null=True, default=None)
 
@@ -34,8 +36,30 @@ class ProductCategory(models.Model):
         verbose_name = 'Product category'
         verbose_name_plural = 'Products categories'
 
+class SeoModel(models.Model):
+    seo_title = models.CharField('Title', blank=True, max_length=250)
+    seo_description = models.CharField('Description', blank=True, max_length=250)
+    seo_keywords = models.CharField('Keywords', blank=True, max_length=250)
 
-class Product(models.Model):
+    def get_seo_title(self):
+        if self.seo_title:
+            return self.seo_title
+        return self.name
+
+    def get_seo_description(self):
+        if self.seo_description:
+            return self.seo_description
+        return self.description
+
+    def get_seo_keywords(self):
+        if self.seo_keywords:
+            return self.seo_keywords
+        return ''
+
+    class Meta:
+        abstract = True
+
+class Product(SeoModel):
     name = models.CharField(max_length=64, blank=True, null=True, default=None)
     # _price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     in_stock = models.IntegerField(default=1, blank=False)
@@ -60,13 +84,8 @@ class Product(models.Model):
                                     quoted=for_currency,
                                     at=at_date)
                             .first())
-        return self.product_price.value * rate.value if rate else 0
-
-    # def update_stock(self):
-    #     if self.in_stock <= 0:
-    #         self.is_active = False
-    #     else:
-    #         self.is_active = True
+        price = self.product_price.value * rate.value
+        return round(price, 2) if rate else 0
 
     @property
     def price(self):

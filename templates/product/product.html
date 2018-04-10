@@ -2,6 +2,11 @@
 {% load static %}
 
 {% block content %}
+<head>
+    <title>{{ product.get_seo_title }}</title>
+    <meta name="description" content="{{ product.get_seo_description }}"/>
+    <meta name="keywords" content="{{ product.get_seo_keywords }}"/>
+</head>
 
         <div class="container">
             <div class="row">
