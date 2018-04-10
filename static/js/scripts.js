@@ -16,6 +16,10 @@ $(document).ready(function(){
 		console.log('session key:' + csrf_token);
 		data["csrfmiddlewaretoken"] = csrf_token;
 		var url = form.attr('action');
+		if (!url) {
+			url = 'cart_adding/'
+		}
+		// var url = 'cart_adding/'
 		$.ajax({
 			url: url,
 			type: 'POST',
@@ -63,6 +67,7 @@ $(document).ready(function(){
 	$(document).on('click', '.delete-item', function(e){
 		e.preventDefault();
 		product_id = $(this).data("product_id");
+		console.log('cart_delete '+ product_id + '');
 		nmb = 0;
 		cart_update(product_id, nmb, is_delete=true);
 	})

@@ -18,21 +18,32 @@ def cart_adding(request):
     quantity = data.get('quantity')
     is_delete = data.get('is_delete')
 
+    print("i'm updating cart")
+
     if is_delete == 'true':
         print('Deleting from cart: product_id:{}, quantity:{}'.format(product_id, quantity))
-        Product_in_cart.objects.filter(id=product_id).update(is_active=False)
+        removed_product = Product_in_cart.objects.get(id=product_id)
+        removed_product.product.in_stock += removed_product.quantity
+        removed_product.product.save(force_update=True)
+        update_stock(removed_product.product)
+        removed_product.is_active = False
+        removed_product.save(force_update=True)
     else:
         currency = settings.DISPLAY_CURRENCY
         print(currency)
         new_product, created = Product_in_cart.objects.get_or_create(
             session_key=session_key, product_id=product_id, is_active=True, defaults={'quantity':quantity})
+        new_product.product.in_stock -= int(quantity)
+        new_product.product.save(force_update=True)
+        update_stock(new_product.product)
         if not created:
+            # if (new_product.product.in_stock < )
             new_product.quantity += int(quantity)
+            new_product.product.in_stock -= int(quantity)
+            new_product.product.save(force_update=True)
+            update_stock(new_product.product)
             new_product.currency = currency
             new_product.save(force_update=True)
-
-    products_total_quantity = Product_in_cart.objects.filter(
-        session_key=session_key, is_active=True).count()
 
     products_in_cart = Product_in_cart.objects.filter(session_key=session_key, is_active=True)
     products_total_quantity = products_in_cart.count()
@@ -94,6 +105,11 @@ def checkout(request):
                         price_per_item=product_in_cart.price_per_item, 
                         total_price=product_in_cart.total_price)
 
+                    # product_in_cart.product.in_stock -= product_in_cart.quantity
+                    # if product_in_cart.product.in_stock <= 0:
+                    #     product_in_cart.product.is_active = False
+                    # product_in_cart.product.save(force_update=True)
+
                     product_in_cart.is_active = False
                     product_in_cart.save()
                     product_string += '-{} x {};\n'.format(product_in_cart.product.name, value)
@@ -116,5 +132,10 @@ def checkout(request):
     return render(request, 'order/checkout.html', locals())
 
 
-
+def update_stock(product):
+    if product.in_stock <= 0:
+        product.is_active = False
+    elif product.in_stock > 0:
+        product.is_active = True
+    product.save(force_update=True)
 

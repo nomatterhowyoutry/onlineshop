@@ -38,6 +38,7 @@ class ProductCategory(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=64, blank=True, null=True, default=None)
     # _price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    in_stock = models.IntegerField(default=1, blank=False)
     discount = models.IntegerField(default=0)
     category = models.ForeignKey(ProductCategory, blank=True, null=True, default=None, on_delete=models.CASCADE)
     description = models.TextField(blank=True, null=True, default=None)
@@ -60,6 +61,12 @@ class Product(models.Model):
                                     at=at_date)
                             .first())
         return self.product_price.value * rate.value if rate else 0
+
+    # def update_stock(self):
+    #     if self.in_stock <= 0:
+    #         self.is_active = False
+    #     else:
+    #         self.is_active = True
 
     @property
     def price(self):
