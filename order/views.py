@@ -83,7 +83,12 @@ def checkout(request):
             email = data['email']
             user, created = User.objects.get_or_create(username=phone, defaults={'first_name':name})
 
-            order = Order.objects.create(user=user, customer_name=name, customer_phone=phone, status_id=1)
+            order = Order.objects.create(
+                user=user,
+                customer_name=name, 
+                customer_phone=phone, 
+                customer_email = email, 
+                status_id=1)
 
             product_string = ''''''
 
@@ -91,6 +96,9 @@ def checkout(request):
                 if key.startswith('product_in_cart_'):
                     product_in_cart_id = key.split('product_in_cart_')[1]
                     product_in_cart = Product_in_cart.objects.get(id=product_in_cart_id)
+                    product_in_cart.product.in_stock -= (int(value) - product_in_cart.quantity)
+                    product_in_cart.product.save(force_update=True)
+                    update_stock(product_in_cart.product)
                     product_in_cart.quantity = int(value)
                     product_in_cart.order = order
                     product_in_cart.save(force_update=True)

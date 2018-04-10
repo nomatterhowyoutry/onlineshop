@@ -34,7 +34,19 @@ class ProductCategory(models.Model):
 
     class Meta:
         verbose_name = 'Product category'
-        verbose_name_plural = 'Products categories'
+        verbose_name_plural = 'Product categories'
+
+class ProductSubcategory(models.Model):
+    name = models.CharField(max_length=64, blank=True, null=True, default=None)
+    category = models.ForeignKey(ProductCategory, blank=True, null=True, default=None, on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return "%s" % (self.name)
+
+    class Meta:
+        verbose_name = 'Product subcategory'
+        verbose_name_plural = 'Product subcategories'
 
 class SeoModel(models.Model):
     seo_title = models.CharField('Title', blank=True, max_length=250)
@@ -62,6 +74,8 @@ class SeoModel(models.Model):
 class Product(SeoModel):
     name = models.CharField(max_length=64, blank=True, null=True, default=None)
     # _price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    # , blank=True, null=True, default=None, on_delete=models.CASCADE
+    subcategory = models.ManyToManyField(ProductSubcategory, blank=True, default=None)
     in_stock = models.IntegerField(default=1, blank=False)
     discount = models.IntegerField(default=0)
     category = models.ForeignKey(ProductCategory, blank=True, null=True, default=None, on_delete=models.CASCADE)

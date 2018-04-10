@@ -9,16 +9,16 @@ class Product_priceInline(admin.StackedInline):
     model = Product_price
     fk_value = 'price' 
 
+class ProductSubcategoryInline(admin.StackedInline):
+    model = ProductSubcategory
+    extra = 0
+
 class ProductAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Product._meta.fields]
-    # list_display.append('get_productprice_value')
     list_select_related = True
     inlines = [Product_priceInline, Product_imageInline]
 
     list_display.append('price')
-
-    # def get_productprice_value(self, instance):
-    #     return instance.price
 
     class Meta:
         model = Product
@@ -32,6 +32,14 @@ class CurrencyAdmin(admin.ModelAdmin):
         model = Currency
 
 admin.site.register(Currency, CurrencyAdmin)
+
+class ProductSubcategoryAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ProductSubcategory._meta.fields]
+
+    class Meta:
+        model = ProductSubcategory
+
+admin.site.register(ProductSubcategory, ProductSubcategoryAdmin)
 
 class ExchangeRateAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ExchangeRate._meta.fields]
@@ -60,6 +68,7 @@ admin.site.register(Product_image, Product_imageAdmin)
 
 class ProductCategoryAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ProductCategory._meta.fields]
+    inlines = [ProductSubcategoryInline]
 
     class Meta:
         model = ProductCategory
