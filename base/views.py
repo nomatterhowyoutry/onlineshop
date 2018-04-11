@@ -12,8 +12,8 @@ def base(request):
     print('session key: ', request.session.session_key)
 
     products_items = Product_image.objects.filter(is_main=True, is_active=True, product__is_active=True)
-    products_items_phones = products_items.filter(is_main=True, is_active=True, product__category_id=1)
-    products_items_laptops = products_items.filter(is_main=True, is_active=True, product__category_id=2)
+    products_items_phones = products_items.filter(is_main=True, is_active=True, product__category_id=2)
+    products_items_laptops = products_items.filter(is_main=True, is_active=True, product__category_id=1)
     return render(request, 'base/home.html', locals())
 
 def change_currency(request):

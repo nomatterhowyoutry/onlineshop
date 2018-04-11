@@ -36,6 +36,7 @@ html, body, .wrapper{
 
 .section-top{
 	margin: 0px;
+	background-color: white;
 }
 
 .product-item{
@@ -102,4 +103,9 @@ html, body, .wrapper{
 
 .form-error{
 	color: red;
+}
+
+.img-css{
+	display: block;
+	margin: 0 auto;
 }
